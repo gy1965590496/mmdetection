@@ -69,7 +69,16 @@ class BboxOverlaps2D:
         repr_str = self.__class__.__name__ + f'(' \
             f'scale={self.scale}, dtype={self.dtype})'
         return repr_str
-
+def bbox_overlaps_biou(bboxes1, bboxes2, mode='iou', is_aligned=False, eps=1e-6, b = 1.5):
+    assert bboxes1.shape[:-2] == bboxes2.shape[:-2]
+    batch_shape = bboxes1.shape[:-2]
+    rows = bboxes1.size(-2)
+    cols = bboxes2.size(-2)
+    if rows * cols == 0:
+        if is_aligned:
+            return bboxes1.new(batch_shape + (rows, ))
+        else:
+            return bboxes1.new(batch_shape + (rows, cols))
 
 def bbox_overlaps(bboxes1, bboxes2, mode='iou', is_aligned=False, eps=1e-6):
     """Calculate overlap between two set of bboxes.

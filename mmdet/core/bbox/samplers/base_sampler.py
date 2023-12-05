@@ -76,11 +76,11 @@ class BaseSampler(metaclass=ABCMeta):
                 raise ValueError(
                     'gt_labels must be given when add_gt_as_proposals is True')
             bboxes = torch.cat([gt_bboxes, bboxes], dim=0)
-            assign_result.add_gt_(gt_labels)
+            assign_result.add_gt_(gt_labels) # 将gt作为样本添加到proposal中
             gt_ones = bboxes.new_ones(gt_bboxes.shape[0], dtype=torch.uint8)
             gt_flags = torch.cat([gt_ones, gt_flags])
 
-        num_expected_pos = int(self.num * self.pos_fraction)
+        num_expected_pos = int(self.num * self.pos_fraction) # 128
         pos_inds = self.pos_sampler._sample_pos(
             assign_result, num_expected_pos, bboxes=bboxes, **kwargs)
         # We found that sampled indices have duplicated items occasionally.

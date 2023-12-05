@@ -16,6 +16,15 @@ from .transforms import (Albu, CopyPaste, CutOut, Expand, MinIoURandomCrop,
                          RandomFlip, RandomShift, Resize, SegRescale,
                          YOLOXHSVRandomAug)
 
+# myRegistration
+from .pair_loading import (PairLoadImagesFromFile, PairLoadAnnotations)
+from .pair_formatting import PairDefaultFormatBundle, PairCollect
+from .pair_transforms import PairNormalize, PairPad, PairRandomFlip, PairResize, PairBlurAug
+from .pair_test_aug import PairMultiScaleFlipAug
+
+from .loading import LoadOcclusions
+
+
 __all__ = [
     'Compose', 'to_tensor', 'ToTensor', 'ImageToTensor', 'ToDataContainer',
     'Transpose', 'Collect', 'DefaultFormatBundle', 'LoadAnnotations',
@@ -27,5 +36,10 @@ __all__ = [
     'AutoAugment', 'CutOut', 'Shear', 'Rotate', 'ColorTransform',
     'EqualizeTransform', 'BrightnessTransform', 'ContrastTransform',
     'Translate', 'RandomShift', 'Mosaic', 'MixUp', 'RandomAffine',
-    'YOLOXHSVRandomAug', 'CopyPaste'
+    'YOLOXHSVRandomAug', 'CopyPaste',
+    # myRegistration
+    'PairLoadImagesFromFile', 'PairLoadAnnotations',
+    'PairDefaultFormatBundle', 'PairCollect', 'PairImageToTensor',
+    'PairNormalize', 'PairPad', 'PairRandomFlip', 'PairResize',
+    'PairMultiScaleFlipAug', 'PairBlurAug', 'LoadOcclusions'    
 ]

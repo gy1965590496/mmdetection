@@ -14,9 +14,14 @@ from .sim_ota_assigner import SimOTAAssigner
 from .task_aligned_assigner import TaskAlignedAssigner
 from .uniform_assigner import UniformAssigner
 
+from .oha_assign_result import OHAAssignResult
+from .oha_maxiou_assigner import OHAMaxIoUAssigner
+
 __all__ = [
     'BaseAssigner', 'MaxIoUAssigner', 'ApproxMaxIoUAssigner', 'AssignResult',
     'PointAssigner', 'ATSSAssigner', 'CenterRegionAssigner', 'GridAssigner',
     'HungarianAssigner', 'RegionAssigner', 'UniformAssigner', 'SimOTAAssigner',
-    'TaskAlignedAssigner', 'MaskHungarianAssigner'
+    'TaskAlignedAssigner', 'MaskHungarianAssigner',
+
+    'OHAAssignResult', 'OHAMaxIoUAssigner'
 ]

@@ -267,7 +267,7 @@ class BBoxHead(BaseModule):
         if cls_score is not None:
             avg_factor = max(torch.sum(label_weights > 0).float().item(), 1.)
             if cls_score.numel() > 0:
-                loss_cls_ = self.loss_cls(
+                loss_cls_ = self.loss_cls( # gy：计算分类损失
                     cls_score,
                     labels,
                     label_weights,
@@ -288,13 +288,13 @@ class BBoxHead(BaseModule):
             pos_inds = (labels >= 0) & (labels < bg_class_ind)
             # do not perform bounding box regression for BG anymore.
             if pos_inds.any():
-                if self.reg_decoded_bbox:
+                if self.reg_decoded_bbox: # gy：False
                     # When the regression loss (e.g. `IouLoss`,
                     # `GIouLoss`, `DIouLoss`) is applied directly on
                     # the decoded bounding boxes, it decodes the
                     # already encoded coordinates to absolute format.
                     bbox_pred = self.bbox_coder.decode(rois[:, 1:], bbox_pred)
-                if self.reg_class_agnostic:
+                if self.reg_class_agnostic: # gy：False
                     pos_bbox_pred = bbox_pred.view(
                         bbox_pred.size(0), 4)[pos_inds.type(torch.bool)]
                 else:
@@ -302,7 +302,7 @@ class BBoxHead(BaseModule):
                         bbox_pred.size(0), -1,
                         4)[pos_inds.type(torch.bool),
                            labels[pos_inds.type(torch.bool)]]
-                losses['loss_bbox'] = self.loss_bbox(
+                losses['loss_bbox'] = self.loss_bbox( # gy：计算回归损失
                     pos_bbox_pred,
                     bbox_targets[pos_inds.type(torch.bool)],
                     bbox_weights[pos_inds.type(torch.bool)],

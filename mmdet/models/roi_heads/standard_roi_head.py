@@ -87,10 +87,10 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
                 gt_bboxes_ignore = [None for _ in range(num_imgs)]
             sampling_results = []
             for i in range(num_imgs):
-                assign_result = self.bbox_assigner.assign(
+                assign_result = self.bbox_assigner.assign( # 样本分配
                     proposal_list[i], gt_bboxes[i], gt_bboxes_ignore[i],
                     gt_labels[i])
-                sampling_result = self.bbox_sampler.sample(
+                sampling_result = self.bbox_sampler.sample( # 采样
                     assign_result,
                     proposal_list[i],
                     gt_bboxes[i],
@@ -107,7 +107,7 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
             losses.update(bbox_results['loss_bbox'])
 
         # mask head forward and loss
-        if self.with_mask:
+        if self.with_mask: # gy：False
             mask_results = self._mask_forward_train(x, sampling_results,
                                                     bbox_results['bbox_feats'],
                                                     gt_masks, img_metas)
@@ -119,8 +119,8 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
         """Box head forward function used in both training and testing."""
         # TODO: a more flexible way to decide which feature maps to use
         bbox_feats = self.bbox_roi_extractor(
-            x[:self.bbox_roi_extractor.num_inputs], rois)
-        if self.with_shared_head:
+            x[:self.bbox_roi_extractor.num_inputs], rois) # 提取roi特征
+        if self.with_shared_head: # False
             bbox_feats = self.shared_head(bbox_feats)
         cls_score, bbox_pred = self.bbox_head(bbox_feats)
 
@@ -131,7 +131,7 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
     def _bbox_forward_train(self, x, sampling_results, gt_bboxes, gt_labels,
                             img_metas):
         """Run forward function and calculate loss for box head in training."""
-        rois = bbox2roi([res.bboxes for res in sampling_results])
+        rois = bbox2roi([res.bboxes for res in sampling_results]) # 提取roi
         bbox_results = self._bbox_forward(x, rois)
 
         bbox_targets = self.bbox_head.get_targets(sampling_results, gt_bboxes,

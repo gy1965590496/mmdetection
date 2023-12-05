@@ -11,9 +11,14 @@ from .random_sampler import RandomSampler
 from .sampling_result import SamplingResult
 from .score_hlr_sampler import ScoreHLRSampler
 
+from .oha_sampler import OHASampler
+from .oha_sampling_result import OHASamplingResult
+
 __all__ = [
     'BaseSampler', 'PseudoSampler', 'RandomSampler',
     'InstanceBalancedPosSampler', 'IoUBalancedNegSampler', 'CombinedSampler',
     'OHEMSampler', 'SamplingResult', 'ScoreHLRSampler', 'MaskPseudoSampler',
-    'MaskSamplingResult'
+    'MaskSamplingResult',
+
+    'OHASampler', 'OHASamplingResult'
 ]

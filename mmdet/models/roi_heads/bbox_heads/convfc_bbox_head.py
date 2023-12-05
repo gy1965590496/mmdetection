@@ -37,11 +37,11 @@ class ConvFCBBoxHead(BBoxHead):
             *args, init_cfg=init_cfg, **kwargs)
         assert (num_shared_convs + num_shared_fcs + num_cls_convs +
                 num_cls_fcs + num_reg_convs + num_reg_fcs > 0)
-        if num_cls_convs > 0 or num_reg_convs > 0:
+        if num_cls_convs > 0 or num_reg_convs > 0: # False
             assert num_shared_fcs == 0
-        if not self.with_cls:
+        if not self.with_cls: # False
             assert num_cls_convs == 0 and num_cls_fcs == 0
-        if not self.with_reg:
+        if not self.with_reg: # False
             assert num_reg_convs == 0 and num_reg_fcs == 0
         self.num_shared_convs = num_shared_convs
         self.num_shared_fcs = num_shared_fcs
@@ -158,42 +158,42 @@ class ConvFCBBoxHead(BBoxHead):
 
     def forward(self, x):
         # shared part
-        if self.num_shared_convs > 0:
+        if self.num_shared_convs > 0: # False
             for conv in self.shared_convs:
                 x = conv(x)
 
         if self.num_shared_fcs > 0:
-            if self.with_avg_pool:
+            if self.with_avg_pool: # False
                 x = self.avg_pool(x)
 
             x = x.flatten(1)
 
-            for fc in self.shared_fcs:
+            for fc in self.shared_fcs: # two fc，12544->1024，1024->1024
                 x = self.relu(fc(x))
         # separate branches
         x_cls = x
         x_reg = x
 
-        for conv in self.cls_convs:
+        for conv in self.cls_convs: # False
             x_cls = conv(x_cls)
-        if x_cls.dim() > 2:
+        if x_cls.dim() > 2: # False
             if self.with_avg_pool:
                 x_cls = self.avg_pool(x_cls)
             x_cls = x_cls.flatten(1)
-        for fc in self.cls_fcs:
+        for fc in self.cls_fcs: # False
             x_cls = self.relu(fc(x_cls))
 
-        for conv in self.reg_convs:
+        for conv in self.reg_convs: # False
             x_reg = conv(x_reg)
-        if x_reg.dim() > 2:
+        if x_reg.dim() > 2: # False
             if self.with_avg_pool:
                 x_reg = self.avg_pool(x_reg)
             x_reg = x_reg.flatten(1)
-        for fc in self.reg_fcs:
+        for fc in self.reg_fcs: # False
             x_reg = self.relu(fc(x_reg))
 
-        cls_score = self.fc_cls(x_cls) if self.with_cls else None
-        bbox_pred = self.fc_reg(x_reg) if self.with_reg else None
+        cls_score = self.fc_cls(x_cls) if self.with_cls else None # 1024->11
+        bbox_pred = self.fc_reg(x_reg) if self.with_reg else None # 1024->40
         return cls_score, bbox_pred
 
 

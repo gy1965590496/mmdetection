@@ -26,6 +26,45 @@ except ImportError:
     albumentations = None
     Compose = None
 
+#myAdd
+@PIPELINES.register_module()
+class BlurAug(object):
+    """Blur augmention for images.
+
+    Args:
+        prob (list[float]): The probability to perform blur augmention for
+            each image. Defaults to [0.0, 0.2].
+    """
+
+    def __init__(self, prob=[0.0, 0.2]):
+        self.prob = prob
+
+    def __call__(self, z, result):
+        """Call function.
+
+        For each dict in results, perform blur augmention for image in the
+        dict.
+
+        Args:
+            results (list[dict]): List of dict that from
+                :obj:`mmtrack.CocoVideoDataset`.
+
+        Returns:
+            list[dict]: List of dict that contains augmented blur image.
+        """
+        image = result['img']
+        if self.prob[i] > np.random.random():
+            sizes = np.arange(5, 46, 2)
+            size = np.random.choice(sizes)
+            kernel = np.zeros((size, size))
+            c = int(size / 2)
+            wx = np.random.random()
+            kernel[:, c] += 1. / size * wx
+            kernel[c, :] += 1. / size * (1 - wx)
+            image = cv2.filter2D(image, -1, kernel)
+
+        result['img'] = image
+        return result
 
 @PIPELINES.register_module()
 class Resize:

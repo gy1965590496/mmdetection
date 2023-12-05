@@ -46,7 +46,10 @@ def single_gpu_test(model,
                 img_show = mmcv.imresize(img_show, (ori_w, ori_h))
 
                 if out_dir:
-                    out_file = osp.join(out_dir, img_meta['ori_filename'])
+                    # out_file = osp.join(out_dir, img_meta['ori_filename'])
+                    # !!for animal
+                    split_meta = img_meta['ori_filename'].split('/')
+                    out_file = osp.join(out_dir, split_meta[-3], split_meta[-2], split_meta[-1])
                 else:
                     out_file = None
 

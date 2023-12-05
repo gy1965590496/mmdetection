@@ -201,6 +201,12 @@ class LoadMultiChannelImageFromFiles:
                     f'file_client_args={self.file_client_args})')
         return repr_str
 
+@PIPELINES.register_module()
+class LoadOcclusions:
+    def __call__(self, results):
+        results['occ_labels'] = results['ann_info']['occ_labels'].copy()
+        return results
+
 
 @PIPELINES.register_module()
 class LoadAnnotations:
